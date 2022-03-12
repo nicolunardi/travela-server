@@ -1,4 +1,9 @@
 from fastapi import APIRouter
+from sqlalchemy.orm import Session
+from models.listings import Listing as ListingModel
+from models.reviews import Review as ReviewModel
+from models.images import Image as ImageModel
+from models.availability import Availability as AvailabilityModel
 
 router = APIRouter()
 

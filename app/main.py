@@ -2,8 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers import auth, listings, bookings
 from config.settings import origins
+from config.database import Base, engine, SessionLocal
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -13,6 +17,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router, prefix="/auth")
+app.include_router(auth.router, prefix="/user/auth")
 app.include_router(listings.router, prefix="/listings")
 app.include_router(bookings.router, prefix="/bookings")

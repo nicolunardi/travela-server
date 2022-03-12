@@ -9,6 +9,6 @@ class Availability(Base):
 
     start = Column(Date, default=date.today)
     end = Column(Date, default=date.today)
-    listing_id = Column(Integer, ForeignKey("listings.id"))
+    listing_id = Column(Integer, ForeignKey("listings.id"), primary_key=True)
 
     listing = relationship("Listing", back_populates="availability")

@@ -14,7 +14,7 @@ from config.database import Base
 
 
 class Listing(Base):
-    __tablename__ = "Listings"
+    __tablename__ = "listings"
 
     id = Column(Integer, primary_key=True, index=True)
     thumbnail = Column(Text)

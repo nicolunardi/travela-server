@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from models.bookings import Booking as BookingModel
 
 
 router = APIRouter()
