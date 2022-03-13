@@ -1,21 +1,33 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+
 from models.listings import Listing as ListingModel
 from models.reviews import Review as ReviewModel
 from models.images import Image as ImageModel
+from models.bedroom import Bedroom as BedroomModel
 from models.availability import Availability as AvailabilityModel
+
+from schemas.listings import CreateListing, AllListings
+from schemas.users import User
+from controllers import listingsControllers
+from config.database import get_db
+from dependencies.JWTtokens import get_current_user
 
 router = APIRouter()
 
 
-@router.get("/")
-async def get_all_listings():
-    return {"message": "all listings"}
+@router.get("/", tags=["Listings"])
+async def get_all_listings(db: Session = Depends(get_db)):
+    return listingsControllers.get_listings_list(db)
 
 
 @router.post("/new")
-async def create_listing():
-    return {"message": "new listing"}
+async def create_listing(
+    data: CreateListing,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return listingsControllers.create_new_listing(data, current_user, db)
 
 
 @router.get("/{listing_id}")

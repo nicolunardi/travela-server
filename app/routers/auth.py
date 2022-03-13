@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, status
+from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from controllers.authControllers import login_user, register_user
-from schemas.users import UserCreate, UserLogin, GetUser
+from schemas.users import UserCreate
 from schemas.tokens import Token
 from config.database import get_db
 
@@ -25,5 +26,8 @@ async def register(user: UserCreate, db: Session = Depends(get_db)):
     response_model=Token,
     tags=["User"],
 )
-async def login(data: UserLogin, db: Session = Depends(get_db)):
-    return login_user(db, data)
+async def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    return login_user(form_data, db)

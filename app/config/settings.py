@@ -3,7 +3,7 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
-origins = ["http://localhost:5005"]
+origins = ["http://localhost:3000"]
 
 
 class Settings:
