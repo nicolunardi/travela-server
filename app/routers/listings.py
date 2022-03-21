@@ -7,7 +7,12 @@ from models.images import Image as ImageModel
 from models.bedroom import Bedroom as BedroomModel
 from models.availability import Availability as AvailabilityModel
 
-from schemas.listings import CreateListing, AllListings
+from schemas.listings import (
+    CreateListing,
+    AllListingsOut,
+    ListingOut,
+    CreateListingOut,
+)
 from schemas.users import User
 from controllers import listingsControllers
 from config.database import get_db
@@ -16,12 +21,12 @@ from dependencies.JWTtokens import get_current_user
 router = APIRouter()
 
 
-@router.get("/", tags=["Listings"])
+@router.get("/", tags=["Listings"], response_model=AllListingsOut)
 async def get_all_listings(db: Session = Depends(get_db)):
     return listingsControllers.get_listings_list(db)
 
 
-@router.post("/new")
+@router.post("/new", tags=["Listings"], response_model=CreateListingOut)
 async def create_listing(
     data: CreateListing,
     db: Session = Depends(get_db),
@@ -30,9 +35,9 @@ async def create_listing(
     return listingsControllers.create_new_listing(data, current_user, db)
 
 
-@router.get("/{listing_id}")
-async def get_listing(listing_id: str):
-    return {"message": f"listing {listing_id}"}
+@router.get("/{listing_id}", tags=["Listings"], response_model=ListingOut)
+async def get_listing(listing_id: int, db: Session = Depends(get_db)):
+    return listingsControllers.get_listing(listing_id, db)
 
 
 @router.put("/{listing_id}")

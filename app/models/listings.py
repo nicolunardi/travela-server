@@ -49,3 +49,4 @@ class Listing(Base):
     bookings = relationship("Booking", back_populates="listing")
     availability = relationship("Availability", back_populates="listing")
     bedrooms = relationship("Bedroom")
+    images = relationship("Image")

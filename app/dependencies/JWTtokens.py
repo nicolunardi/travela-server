@@ -9,7 +9,7 @@ from config.database import get_db
 from schemas.users import User
 
 from schemas.tokens import TokenPayload
-from errors.exceptions import credentials_exception
+from errors.exceptions import CREDENTIALS_EXCEPTION
 
 
 load_dotenv(find_dotenv())
@@ -34,16 +34,16 @@ async def get_current_user(
         payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=[JWT_ALGORITHM])
         # if the email doesnt exist reject the request
         if payload.get("email") is None:
-            raise credentials_exception
+            raise CREDENTIALS_EXCEPTION
         # destructure the payload
         token_payload = TokenPayload(**payload)
     except JWTError:
-        raise credentials_exception
+        raise CREDENTIALS_EXCEPTION
 
     # get the user from the DB to ensure the one from the token is valid
     user = get_user_by_email(db, token_payload.email)
     if user is None:
-        raise credentials_exception
+        raise CREDENTIALS_EXCEPTION
     return User(email=user.email, id=user.id, name=user.name)
 
 

@@ -1,5 +1,8 @@
 from pydantic import BaseModel
+from datetime import date
+
 from .reviews import Review
+from .availability import Availability
 
 
 class Address(BaseModel):
@@ -28,6 +31,20 @@ class Image(BaseModel):
 
 class Bedroom(BaseModel):
     beds: int = 0
+    id: int
+    listing_id: int
+
+
+class ListingMetadata(BaseModel):
+    total_bedrooms: int = 0
+    total_beds: int = 0
+    type: str
+    description: str = ""
+    bathrooms: int = 0
+    parking: int = 0
+    images: list = []
+    amenities: Amenities
+    bedrooms: list
 
 
 class ListingBase(BaseModel):
@@ -39,11 +56,15 @@ class ListingBase(BaseModel):
 
 class AllListings(ListingBase):
     id: int
-    owner: int
-    reviews: list[Review] = []
+    owner_id: int
+    reviews: list[Review]
 
     class Config:
         orm_mode = True
+
+
+class AllListingsOut(BaseModel):
+    listings: list[AllListings]
 
 
 class CreateListing(ListingBase):
@@ -56,3 +77,17 @@ class CreateListing(ListingBase):
     images: list[Image] = []
     amenities: Amenities
     bedrooms: list[Bedroom] = []
+
+
+class CreateListingOut(BaseModel):
+    listing_id: int
+
+
+class ListingOut(ListingBase):
+    id: int
+    owner_id: int
+    reviews: list[Review]
+    availability: list
+    published: bool
+    posted_on: date
+    metadata: ListingMetadata

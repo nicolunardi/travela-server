@@ -49,7 +49,6 @@ def register_user(db: Session, user: UserCreate):
     new_user = create_user(db, user)
     # if the user was created without problems, generate the jwt token
     if new_user:
-        print(new_user.email)
         token = create_access_token(
             data={"email": new_user.email, "name": new_user.name}
         )
@@ -69,7 +68,6 @@ def login_user(form_data: UserLogin, db):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="No user exists with that email address.",
         )
-
     # check if the passwords match
     if not verify_password(form_data.password, curr_user.hashed_password):
         raise HTTPException(
