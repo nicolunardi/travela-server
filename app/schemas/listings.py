@@ -31,8 +31,10 @@ class Image(BaseModel):
 
 class Bedroom(BaseModel):
     beds: int = 0
-    id: int
-    listing_id: int
+
+
+class CreateBedroom(Bedroom):
+    pass
 
 
 class ListingMetadata(BaseModel):
@@ -74,9 +76,9 @@ class CreateListing(ListingBase):
     description: str = ""
     bathrooms: int = 0
     parking: int = 0
-    images: list[Image] = []
+    images: list = []
     amenities: Amenities
-    bedrooms: list[Bedroom] = []
+    bedrooms: list[CreateBedroom] = []
 
 
 class CreateListingOut(BaseModel):

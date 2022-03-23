@@ -14,7 +14,7 @@ def create_beds(bedrooms: list[int], db: Session, listing_id: int):
 
 def create_images(images: list[str], db: Session, listing_id: int):
     for image in images:
-        new_image = Image(listing_id=listing_id, image=image.image)
+        new_image = Image(listing_id=listing_id, image=image)
         db.add(new_image)
 
     db.commit()

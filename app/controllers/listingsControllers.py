@@ -26,22 +26,22 @@ def get_listings_list(db: Session):
 def create_new_listing(data: CreateListing, current_user: User, db: Session):
     # for listing model
     new_listing_data = {
-        "thumbnail": data.thumbnail,
-        "title": data.title,
-        "price": data.price,
+        "thumbnail": data.thumbnail,  # done
+        "title": data.title,  # done
+        "price": data.price,  # done
         "description": data.description,
-        "type": data.type,
-        "owner_id": current_user.id,
-        "street_number": data.address.street_number,
-        "street_name": data.address.street_name,
-        "suburb": data.address.suburb,
+        "type": data.type,  # done
+        "owner_id": current_user.id,  # done
+        "street_number": data.address.street_number,  # done
+        "street_name": data.address.street_name,  # done
+        "suburb": data.address.suburb,  # done
         "post_code": data.address.post_code,
-        "state": data.address.state,
-        "country": data.address.country,
-        "bathrooms": data.bathrooms,
-        "parking": data.parking,
-        "total_bedrooms": data.total_bedrooms,
-        "total_beds": data.total_beds,
+        "state": data.address.state,  # done
+        "country": data.address.country,  # done
+        "bathrooms": data.bathrooms,  # done
+        "parking": data.parking,  # done
+        "total_bedrooms": data.total_bedrooms,  # done
+        "total_beds": data.total_beds,  # done
         "wifi": data.amenities.wifi,
         "aircon": data.amenities.aircon,
         "kitchen": data.amenities.kitchen,
@@ -54,11 +54,11 @@ def create_new_listing(data: CreateListing, current_user: User, db: Session):
     new_listing = ListingModel(**new_listing_data)
     db.add(new_listing)
     db.commit()
-    # for bedroom model
-    bedrooms = data.bedrooms
-    create_beds(bedrooms, db, new_listing.id)
+    print(data.images)
+    create_beds(data.bedrooms, db, new_listing.id)
     create_images(data.images, db, new_listing.id)
-    return new_listing.id
+    print(new_listing.listing_id)
+    return new_listing.listing_id
 
 
 def get_listing(listing_id: int, db: Session):

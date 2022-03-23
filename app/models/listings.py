@@ -50,3 +50,7 @@ class Listing(Base):
     availability = relationship("Availability", back_populates="listing")
     bedrooms = relationship("Bedroom")
     images = relationship("Image")
+
+    @property
+    def listing_id(self):
+        return self.id

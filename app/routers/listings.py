@@ -32,7 +32,8 @@ async def create_listing(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return listingsControllers.create_new_listing(data, current_user, db)
+    listing_id = listingsControllers.create_new_listing(data, current_user, db)
+    return CreateListingOut(listing_id=listing_id)
 
 
 @router.get("/{listing_id}", tags=["Listings"], response_model=ListingOut)
