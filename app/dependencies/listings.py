@@ -1,3 +1,4 @@
+from httpx import delete
 from sqlalchemy.orm import Session
 from models.bedroom import Bedroom
 from models.images import Image
@@ -12,12 +13,26 @@ def create_beds(bedrooms: list[int], db: Session, listing_id: int):
     db.commit()
 
 
+def update_beds(bedrooms: list[int], db: Session, listing_id: int):
+    # first delete all bedrooms associated with a listing
+    db.query(Bedroom).filter_by(listing_id=listing_id).delete()
+    # add new bedrooms
+    create_beds(bedrooms, db, listing_id)
+
+
 def create_images(images: list[str], db: Session, listing_id: int):
     for image in images:
-        new_image = Image(listing_id=listing_id, image=image)
+        new_image = Image(listing_id=listing_id, image=image["image"])
         db.add(new_image)
 
     db.commit()
+
+
+def update_images(images: list[str], db: Session, listing_id: int):
+    # first delete the images associated with the listing
+    db.query(Image).filter_by(listing_id=listing_id).delete()
+    # then add the new images to the db
+    create_images(images, db, listing_id)
 
 
 def get_address_dict(listing: Listing):

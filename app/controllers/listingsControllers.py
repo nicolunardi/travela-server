@@ -13,6 +13,8 @@ from dependencies.listings import (
     create_images,
     create_all_listing_dict,
     create_listing_dict,
+    update_beds,
+    update_images,
 )
 
 
@@ -73,7 +75,6 @@ def get_listing(listing_id: int, db: Session):
 def update_listing(
     listing_id: int, data: CreateListing, db: Session, current_user: User
 ):
-    print(data)
     db_listing: ListingModel = (
         db.query(ListingModel).filter(ListingModel.id == listing_id).first()
     )
@@ -112,8 +113,15 @@ def update_listing(
         "pool": data.amenities.pool,
     }
     # update the values of the db listing
-    for key, value in vars(update_listing_data).items():
+    for key, value in update_listing_data.items():
         setattr(db_listing, key, value)
 
-    db.add(db_listing)
+    # update bedrooms
+    update_beds(data.bedrooms, db, listing_id)
+
+    # update images
+    update_images(data.images, db, listing_id)
+
     db.commit()
+
+    return {}
