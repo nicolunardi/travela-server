@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from models.bedroom import Bedroom
 from models.images import Image
 from models.listings import Listing
+from models.users import User
 
 
 def create_beds(bedrooms: list[int], db: Session, listing_id: int):
@@ -99,3 +100,8 @@ def create_listing_dict(listing: Listing):
         "metadata": get_metadata_dict(listing),
     }
     return listing_dict
+
+
+def listing_belongs_to_user(listing: Listing, user: User):
+    return user.id == listing.owner_id
+

@@ -15,6 +15,7 @@ from dependencies.listings import (
     create_listing_dict,
     update_beds,
     update_images,
+    listing_belongs_to_user,
 )
 
 
@@ -82,7 +83,7 @@ def update_listing(
         raise LISTING_NOT_FOUND_EXCEPTION
 
     # ensure the current user is the owner of the listing that is to be edited
-    if current_user.id != db_listing.owner_id:
+    if not listing_belongs_to_user(db_listing, current_user):
         raise USER_NOT_OWNER_EXCEPTION
 
     # format the data for the listing model
@@ -124,4 +125,20 @@ def update_listing(
 
     db.commit()
 
+    return {}
+
+
+def delete_listing(listing_id: int, db: Session, current_user: User):
+    db_listing: ListingModel = (
+        db.query(ListingModel).filter(ListingModel.id == listing_id).first()
+    )
+    if not db_listing:
+        raise LISTING_NOT_FOUND_EXCEPTION
+
+    # ensure the current user is the owner of the listing that is to be edited
+    if not listing_belongs_to_user(db_listing, current_user):
+        raise USER_NOT_OWNER_EXCEPTION
+
+    db.delete(db_listing)
+    db.commit()
     return {}

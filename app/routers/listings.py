@@ -48,12 +48,18 @@ async def update_listing(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return listingsControllers.update_listing(listing_id, data, db, current_user)
+    return listingsControllers.update_listing(
+        listing_id, data, db, current_user
+    )
 
 
-@router.delete("/{listing_id}")
-async def delete_listing(listing_id: str):
-    return {"message": f"delete listing {listing_id}"}
+@router.delete("/{listing_id}", tags=["Listings"])
+async def delete_listing(
+    listing_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return listingsControllers.delete_listing(listing_id, db, current_user)
 
 
 @router.put("/publish/{listing_id}")

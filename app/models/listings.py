@@ -45,11 +45,17 @@ class Listing(Base):
     pool = Column(Boolean, default=False)
 
     owner = relationship("User", back_populates="listings")
-    reviews = relationship("Review", back_populates="listing")
-    bookings = relationship("Booking", back_populates="listing")
-    availability = relationship("Availability", back_populates="listing")
-    bedrooms = relationship("Bedroom")
-    images = relationship("Image")
+    reviews = relationship(
+        "Review", back_populates="listing", cascade="all, delete"
+    )
+    bookings = relationship(
+        "Booking", back_populates="listing", cascade="all, delete"
+    )
+    availability = relationship(
+        "Availability", back_populates="listing", cascade="all, delete"
+    )
+    bedrooms = relationship("Bedroom", cascade="all, delete")
+    images = relationship("Image", cascade="all, delete")
 
     @property
     def listing_id(self):

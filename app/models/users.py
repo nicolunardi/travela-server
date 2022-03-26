@@ -11,4 +11,6 @@ class User(Base):
     name = Column(String(20), nullable=False)
     hashed_password = Column(LargeBinary, nullable=False)
 
-    listings = relationship("Listing", back_populates="owner")
+    listings = relationship(
+        "Listing", back_populates="owner", cascade="all, delete"
+    )
