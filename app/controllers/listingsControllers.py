@@ -1,13 +1,10 @@
 from sqlalchemy.orm import Session
 from errors.exceptions import (
-    LISTING_NOT_FOUND_EXCEPTION,
     USER_NOT_OWNER_EXCEPTION,
 )
 from models.listings import Listing as ListingModel
-from models.images import Image as ImageModel
-from models.bedroom import Bedroom as BedroomModel
 from schemas.users import User
-from schemas.listings import AllListings, CreateListing
+from schemas.listings import CreateListing
 from schemas.availability import AvailabilityIn
 from dependencies.listings import (
     create_beds,

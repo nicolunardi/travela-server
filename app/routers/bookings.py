@@ -1,30 +1,73 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from dependencies.JWTtokens import get_current_user
+from schemas.bookings import (
+    BookingOut,
+    CreateBookingOut,
+    CreateBookingIn,
+    AcceptDeclineBookingOut,
+)
 from models.bookings import Booking as BookingModel
+from config.database import get_db
+from controllers import bookingsControllers
 
 
 router = APIRouter()
 
 
-@router.get("/")
-async def get_all_bookings():
-    return {"message": "all bookings"}
+@router.get("/", tags=["Bookings"], response_model=BookingOut)
+async def get_all_bookings(
+    db: Session = Depends(get_db), user=Depends(get_current_user)
+):
+    return bookingsControllers.get_bookings(db)
 
 
-@router.post("/new/{listing_id}")
-async def create_booking(listing_id):
-    return {"message": f"Booking for listing {listing_id}"}
+@router.post(
+    "/new/{listing_id}", tags=["Bookings"], response_model=CreateBookingOut
+)
+async def create_booking(
+    listing_id: int,
+    data: CreateBookingIn,
+    db: Session = Depends(get_db),
+    curr_user=Depends(get_current_user),
+):
+    return bookingsControllers.create_booking(listing_id, data, db, curr_user)
 
 
-@router.put("/accept/{booking_id}")
-async def accept_booking(booking_id):
-    return {"message": f"accepting booking {booking_id}"}
+@router.put(
+    "/accept/{booking_id}",
+    tags=["Bookings"],
+    response_model=AcceptDeclineBookingOut,
+)
+async def accept_booking(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    curr_user=Depends(get_current_user),
+):
+    return bookingsControllers.accept_booking(booking_id, db, curr_user)
 
 
-@router.put("/decline/{booking_id}")
-async def decline_booking(booking_id):
-    return {"message": f"decline booking {booking_id}"}
+@router.put(
+    "/decline/{booking_id}",
+    tags=["Bookings"],
+    response_model=AcceptDeclineBookingOut,
+)
+async def decline_booking(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    curr_user=Depends(get_current_user),
+):
+    return bookingsControllers.decline_booking(booking_id, db, curr_user)
 
 
-@router.delete("/{booking_id}")
-async def delete_booking(booking_id):
-    return {"message": f"delete booking {booking_id}"}
+@router.delete(
+    "/{booking_id}",
+    tags=["Bookings"],
+    response_model=AcceptDeclineBookingOut,
+)
+async def delete_booking(
+    booking_id: int,
+    db: Session = Depends(get_db),
+    curr_user=Depends(get_current_user),
+):
+    return bookingsControllers.delete_booking(booking_id, db, curr_user)
