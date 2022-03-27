@@ -13,6 +13,7 @@ from schemas.listings import (
     ListingOut,
     CreateListingOut,
 )
+from schemas.availability import AvailabilityIn
 from schemas.users import User
 from controllers import listingsControllers
 from config.database import get_db
@@ -62,14 +63,25 @@ async def delete_listing(
     return listingsControllers.delete_listing(listing_id, db, current_user)
 
 
-@router.put("/publish/{listing_id}")
-async def publish_listing(listing_id: str):
-    return {"message": f"publish listing {listing_id}"}
+@router.put("/publish/{listing_id}", tags=["Listings"])
+async def publish_listing(
+    listing_id: int,
+    data: AvailabilityIn,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return listingsControllers.publish_listing(
+        listing_id, data, db, current_user
+    )
 
 
-@router.put("/unpublish/{listing_id}")
-async def unpublish_listing(listing_id: str):
-    return {"message": f"unpublish listing {listing_id}"}
+@router.put("/unpublish/{listing_id}", tags=["Listings"])
+async def unpublish_listing(
+    listing_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return listingsControllers.unpublish_listing(listing_id, db, current_user)
 
 
 @router.put("/publish/{listing_id}/review/{booking_id}")

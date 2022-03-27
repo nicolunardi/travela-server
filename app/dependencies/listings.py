@@ -1,9 +1,11 @@
-from httpx import delete
 from sqlalchemy.orm import Session
+from schemas.availability import AvailabilityIn
 from models.bedroom import Bedroom
 from models.images import Image
 from models.listings import Listing
 from models.users import User
+from models.availability import Availability
+from errors.exceptions import LISTING_NOT_FOUND_EXCEPTION
 
 
 def create_beds(bedrooms: list[int], db: Session, listing_id: int):
@@ -105,3 +107,24 @@ def create_listing_dict(listing: Listing):
 def listing_belongs_to_user(listing: Listing, user: User):
     return user.id == listing.owner_id
 
+
+def get_listing_by_id(listing_id: int, db: Session):
+    db_listing: Listing = (
+        db.query(Listing).filter(Listing.id == listing_id).first()
+    )
+    if not db_listing:
+        raise LISTING_NOT_FOUND_EXCEPTION
+
+    return db_listing
+
+
+def create_availabilities(listing_id: int, data: AvailabilityIn, db: Session):
+    for availability in data.availability:
+        new_availability = Availability(
+            start=availability.start,
+            end=availability.end,
+            listing_id=listing_id,
+        )
+        db.add(new_availability)
+
+    db.commit()

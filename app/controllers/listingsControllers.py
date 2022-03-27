@@ -8,6 +8,7 @@ from models.images import Image as ImageModel
 from models.bedroom import Bedroom as BedroomModel
 from schemas.users import User
 from schemas.listings import AllListings, CreateListing
+from schemas.availability import AvailabilityIn
 from dependencies.listings import (
     create_beds,
     create_images,
@@ -16,6 +17,8 @@ from dependencies.listings import (
     update_beds,
     update_images,
     listing_belongs_to_user,
+    get_listing_by_id,
+    create_availabilities,
 )
 
 
@@ -65,22 +68,14 @@ def create_new_listing(data: CreateListing, current_user: User, db: Session):
 
 
 def get_listing(listing_id: int, db: Session):
-    db_listing: ListingModel = (
-        db.query(ListingModel).filter(ListingModel.id == listing_id).first()
-    )
-    if not db_listing:
-        raise LISTING_NOT_FOUND_EXCEPTION
+    db_listing: ListingModel = get_listing_by_id(listing_id, db)
     return create_listing_dict(db_listing)
 
 
 def update_listing(
     listing_id: int, data: CreateListing, db: Session, current_user: User
 ):
-    db_listing: ListingModel = (
-        db.query(ListingModel).filter(ListingModel.id == listing_id).first()
-    )
-    if not db_listing:
-        raise LISTING_NOT_FOUND_EXCEPTION
+    db_listing: ListingModel = get_listing_by_id(listing_id, db)
 
     # ensure the current user is the owner of the listing that is to be edited
     if not listing_belongs_to_user(db_listing, current_user):
@@ -129,11 +124,7 @@ def update_listing(
 
 
 def delete_listing(listing_id: int, db: Session, current_user: User):
-    db_listing: ListingModel = (
-        db.query(ListingModel).filter(ListingModel.id == listing_id).first()
-    )
-    if not db_listing:
-        raise LISTING_NOT_FOUND_EXCEPTION
+    db_listing: ListingModel = get_listing_by_id(listing_id, db)
 
     # ensure the current user is the owner of the listing that is to be edited
     if not listing_belongs_to_user(db_listing, current_user):
@@ -141,4 +132,34 @@ def delete_listing(listing_id: int, db: Session, current_user: User):
 
     db.delete(db_listing)
     db.commit()
+    return {}
+
+
+def publish_listing(
+    listing_id: int, data: AvailabilityIn, db: Session, current_user: User
+):
+    db_listing: ListingModel = get_listing_by_id(listing_id, db)
+
+    if not listing_belongs_to_user(db_listing, current_user):
+        raise USER_NOT_OWNER_EXCEPTION
+
+    create_availabilities(listing_id, data, db)
+
+    db_listing.published = True
+
+    db.commit()
+
+    return {}
+
+
+def unpublish_listing(listing_id: int, db: Session, current_user: User):
+    db_listing: ListingModel = get_listing_by_id(listing_id, db)
+
+    if not listing_belongs_to_user(db_listing, current_user):
+        raise USER_NOT_OWNER_EXCEPTION
+
+    db_listing.published = False
+
+    db.commit()
+
     return {}
