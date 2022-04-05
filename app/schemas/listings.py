@@ -93,3 +93,4 @@ class ListingOut(ListingBase):
     published: bool
     posted_on: date
     metadata: ListingMetadata
+    owner_name: str

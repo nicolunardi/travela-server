@@ -1,11 +1,14 @@
 from sqlalchemy.orm import Session
 from errors.exceptions import (
     USER_NOT_OWNER_EXCEPTION,
+    BOOKING_WITH_LISTING_AND_USER_EXCEPTION,
 )
 from models.listings import Listing as ListingModel
+from models.reviews import Review as ReviewModel
 from schemas.users import User
 from schemas.listings import CreateListing
 from schemas.availability import AvailabilityIn
+from schemas.reviews import ReviewIn
 from dependencies.listings import (
     create_beds,
     create_images,
@@ -16,6 +19,7 @@ from dependencies.listings import (
     listing_belongs_to_user,
     get_listing_by_id,
     create_availabilities,
+    find_booking_by_listing_user,
 )
 
 
@@ -66,6 +70,7 @@ def create_new_listing(data: CreateListing, current_user: User, db: Session):
 
 def get_listing(listing_id: int, db: Session):
     db_listing: ListingModel = get_listing_by_id(listing_id, db)
+
     return create_listing_dict(db_listing)
 
 
@@ -159,4 +164,26 @@ def unpublish_listing(listing_id: int, db: Session, current_user: User):
 
     db.commit()
 
+    return {}
+
+
+# booking id is needed only to make sure that a valid booking exists, as users can
+# only post reviews after they have a valid booking
+def post_review(
+    listing_id: int,
+    booking_id: int,
+    data: ReviewIn,
+    db: Session,
+    current_user: User,
+):
+    # check a booking exists with user id and listing id and booking id
+    db_booking = find_booking_by_listing_user(
+        booking_id, listing_id, current_user, db
+    )
+    if not db_booking:
+        raise BOOKING_WITH_LISTING_AND_USER_EXCEPTION
+
+    newReview = ReviewModel(**data)
+    db.add(newReview)
+    db.commit()
     return {}

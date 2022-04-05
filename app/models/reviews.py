@@ -8,7 +8,7 @@ class Review(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     text = Column(Text, primary_key=True, index=True)
-    rating = Column(Float, default=3.5)
+    rating = Column(Integer, default=3)
     listing_id = Column(Integer, ForeignKey("listings.id"))
     owner_id = Column(Integer, ForeignKey("users.id"))
 

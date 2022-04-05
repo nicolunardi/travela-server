@@ -13,6 +13,7 @@ from schemas.listings import (
     ListingOut,
     CreateListingOut,
 )
+from schemas.reviews import ReviewIn
 from schemas.availability import AvailabilityIn
 from schemas.users import User
 from controllers import listingsControllers
@@ -70,6 +71,7 @@ async def publish_listing(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    print(data)
     return listingsControllers.publish_listing(
         listing_id, data, db, current_user
     )
@@ -84,6 +86,14 @@ async def unpublish_listing(
     return listingsControllers.unpublish_listing(listing_id, db, current_user)
 
 
-@router.put("/publish/{listing_id}/review/{booking_id}")
-async def review_listing(listing_id: str, booking_id: str):
-    return {"message": f"review listing {listing_id} for booking {booking_id}"}
+@router.post("/publish/{listing_id}/review/{booking_id}", tags=["Listings"])
+async def review_listing(
+    listing_id: str,
+    booking_id: str,
+    data: ReviewIn,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return listingsControllers.post_review(
+        listing_id, booking_id, data, db, current_user
+    )

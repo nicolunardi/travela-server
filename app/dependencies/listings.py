@@ -5,6 +5,7 @@ from models.images import Image
 from models.listings import Listing
 from models.users import User
 from models.availability import Availability
+from models.bookings import Booking
 from errors.exceptions import LISTING_NOT_FOUND_EXCEPTION
 
 
@@ -25,7 +26,7 @@ def update_beds(bedrooms: list[int], db: Session, listing_id: int):
 
 def create_images(images: list[str], db: Session, listing_id: int):
     for image in images:
-        new_image = Image(listing_id=listing_id, image=image["image"])
+        new_image = Image(listing_id=listing_id, image=image)
         db.add(new_image)
 
     db.commit()
@@ -100,6 +101,7 @@ def create_listing_dict(listing: Listing):
         "published": listing.published,
         "posted_on": listing.posted_on,
         "metadata": get_metadata_dict(listing),
+        "owner_name": listing.owner.name,
     }
     return listing_dict
 
@@ -128,3 +130,11 @@ def create_availabilities(listing_id: int, data: AvailabilityIn, db: Session):
         db.add(new_availability)
 
     db.commit()
+
+
+def find_booking_by_listing_user(
+    booking_id: int, listing_id: int, user: User, db: Session
+):
+    return db.query(Booking).filter_by(
+        id=booking_id, listing_id=listing_id, owner_id=user.id
+    )
