@@ -11,7 +11,7 @@ class Booking(Base):
     status = Column(String(15), nullable=False)
     start = Column(Date, default=date.today)
     end = Column(Date, default=date.today)
-    total = Column(Float, nullable=False)
+    total = Column(Integer, nullable=False)
     listing_id = Column(Integer, ForeignKey("listings.id"))
     owner_id = Column(Integer, ForeignKey("users.id"))
 

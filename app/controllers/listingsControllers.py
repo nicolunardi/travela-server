@@ -182,8 +182,13 @@ def post_review(
     )
     if not db_booking:
         raise BOOKING_WITH_LISTING_AND_USER_EXCEPTION
-
-    newReview = ReviewModel(**data)
+    print(data)
+    newReview = ReviewModel(
+        text=data.review.text,
+        rating=data.review.rating,
+        listing_id=listing_id,
+        owner_id=current_user.id,
+    )
     db.add(newReview)
     db.commit()
     return {}

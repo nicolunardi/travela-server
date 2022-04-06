@@ -11,7 +11,7 @@ class Booking(BaseModel):
     id: int
     start: date
     end: date
-    total: float
+    total: int
     listing_id: int
     owner_id: int
     status: str
@@ -19,7 +19,7 @@ class Booking(BaseModel):
 
 class CreateBookingIn(BaseModel):
     date_range: DateRange
-    total: float
+    total: int
 
 
 class CreateBookingOut(BaseModel):

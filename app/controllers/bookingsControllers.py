@@ -2,15 +2,32 @@ from sqlalchemy.orm import Session
 from errors.exceptions import USER_NOT_OWNER_EXCEPTION
 from dependencies.listings import get_listing_by_id, listing_belongs_to_user
 from dependencies.bookings import get_booking_by_id
-from schemas.bookings import BookingOut, CreateBookingIn, CreateBookingOut
+from schemas.bookings import (
+    BookingOut,
+    CreateBookingIn,
+    CreateBookingOut,
+    Booking,
+)
 from models.bookings import Booking as BookingModel
 from schemas.users import User
 
 
 def get_bookings(db: Session):
     db_bookings = db.query(BookingModel).all()
-
-    return BookingOut(bookings=db_bookings)
+    all_bookings = []
+    for booking in db_bookings:
+        all_bookings.append(
+            Booking(
+                id=booking.id,
+                start=booking.start,
+                end=booking.end,
+                total=booking.total,
+                listing_id=booking.listing_id,
+                owner_id=booking.owner_id,
+                status=booking.status,
+            )
+        )
+    return BookingOut(bookings=all_bookings)
 
 
 def create_booking(

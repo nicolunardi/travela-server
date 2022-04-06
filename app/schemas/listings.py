@@ -59,7 +59,7 @@ class ListingBase(BaseModel):
 class AllListings(ListingBase):
     id: int
     owner_id: int
-    reviews: list[Review]
+    reviews: list
 
     class Config:
         orm_mode = True
@@ -88,7 +88,7 @@ class CreateListingOut(BaseModel):
 class ListingOut(ListingBase):
     id: int
     owner_id: int
-    reviews: list[Review]
+    reviews: list
     availability: list
     published: bool
     posted_on: date

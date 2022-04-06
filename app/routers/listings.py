@@ -71,7 +71,6 @@ async def publish_listing(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    print(data)
     return listingsControllers.publish_listing(
         listing_id, data, db, current_user
     )
@@ -86,7 +85,7 @@ async def unpublish_listing(
     return listingsControllers.unpublish_listing(listing_id, db, current_user)
 
 
-@router.post("/publish/{listing_id}/review/{booking_id}", tags=["Listings"])
+@router.post("/{listing_id}/review/{booking_id}", tags=["Listings"])
 async def review_listing(
     listing_id: str,
     booking_id: str,

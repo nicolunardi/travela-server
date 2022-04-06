@@ -26,7 +26,10 @@ def update_beds(bedrooms: list[int], db: Session, listing_id: int):
 
 def create_images(images: list[str], db: Session, listing_id: int):
     for image in images:
-        new_image = Image(listing_id=listing_id, image=image)
+        if isinstance(image, str):
+            new_image = Image(listing_id=listing_id, image=image)
+        else:
+            new_image = Image(listing_id=listing_id, image=image["image"])
         db.add(new_image)
 
     db.commit()
@@ -81,6 +84,9 @@ def get_metadata_dict(listing: Listing):
 
 
 def create_all_listing_dict(listing: Listing):
+    for review in listing.reviews:
+        review.owner_name = review.owner.name
+
     listing_dict = {
         "thumbnail": listing.thumbnail,
         "price": listing.price,
