@@ -8,7 +8,7 @@ from models.reviews import Review as ReviewModel
 from schemas.users import User
 from schemas.listings import CreateListing
 from schemas.availability import AvailabilityIn
-from schemas.reviews import ReviewIn
+from schemas.reviews import ReviewIn, ReviewOut
 from dependencies.listings import (
     create_beds,
     create_images,
@@ -64,7 +64,6 @@ def create_new_listing(data: CreateListing, current_user: User, db: Session):
     db.commit()
     create_beds(data.bedrooms, db, new_listing.id)
     create_images(data.images, db, new_listing.id)
-    print(new_listing.listing_id)
     return new_listing.listing_id
 
 
@@ -182,13 +181,19 @@ def post_review(
     )
     if not db_booking:
         raise BOOKING_WITH_LISTING_AND_USER_EXCEPTION
-    print(data)
-    newReview = ReviewModel(
+    new_review = ReviewModel(
         text=data.review.text,
         rating=data.review.rating,
         listing_id=listing_id,
         owner_id=current_user.id,
     )
-    db.add(newReview)
+    db.add(new_review)
     db.commit()
-    return {}
+    return ReviewOut(
+        id=new_review.id,
+        text=new_review.text,
+        rating=new_review.rating,
+        listing_id=new_review.listing_id,
+        owner_id=new_review.owner_id,
+        owner_name=new_review.owner.name,
+    )

@@ -41,7 +41,6 @@ def create_booking(
         owner_id=curr_user.id,
         total=data.total,
     )
-    print(new_booking.id)
     db.add(new_booking)
     db.commit()
     return CreateBookingOut(id=new_booking.id)

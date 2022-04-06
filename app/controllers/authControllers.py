@@ -50,7 +50,11 @@ def register_user(db: Session, user: UserCreate):
     # if the user was created without problems, generate the jwt token
     if new_user:
         token = create_access_token(
-            data={"email": new_user.email, "name": new_user.name}
+            data={
+                "email": new_user.email,
+                "name": new_user.name,
+                "id": new_user.id,
+            }
         )
         return Token(access_token=token, token_type="bearer")
     else:

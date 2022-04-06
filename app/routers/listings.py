@@ -13,7 +13,7 @@ from schemas.listings import (
     ListingOut,
     CreateListingOut,
 )
-from schemas.reviews import ReviewIn
+from schemas.reviews import ReviewIn, ReviewOut
 from schemas.availability import AvailabilityIn
 from schemas.users import User
 from controllers import listingsControllers
@@ -85,7 +85,11 @@ async def unpublish_listing(
     return listingsControllers.unpublish_listing(listing_id, db, current_user)
 
 
-@router.post("/{listing_id}/review/{booking_id}", tags=["Listings"])
+@router.post(
+    "/{listing_id}/review/{booking_id}",
+    tags=["Listings"],
+    response_model=ReviewOut,
+)
 async def review_listing(
     listing_id: str,
     booking_id: str,

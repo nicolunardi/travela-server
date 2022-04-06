@@ -84,6 +84,8 @@ def get_metadata_dict(listing: Listing):
 
 
 def create_all_listing_dict(listing: Listing):
+    # add the owner name to the review object that will be returned. Mainly
+    # to allow the front end to display the users name easily
     for review in listing.reviews:
         review.owner_name = review.owner.name
 

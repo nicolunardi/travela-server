@@ -16,3 +16,7 @@ class CreateReview(BaseModel):
 
 class ReviewIn(BaseModel):
     review: CreateReview
+
+
+class ReviewOut(Review):
+    owner_name: str
