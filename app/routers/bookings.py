@@ -1,15 +1,15 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from dependencies.JWTtokens import get_current_user
-from schemas.bookings import (
+from app.dependencies.JWTtokens import get_current_user
+from app.schemas.bookings import (
     BookingOut,
     CreateBookingOut,
     CreateBookingIn,
     AcceptDeclineBookingOut,
 )
-from models.bookings import Booking as BookingModel
-from config.database import get_db
-from controllers import bookingsControllers
+from app.models.bookings import Booking as BookingModel
+from app.config.database import get_db
+from app.controllers import bookingsControllers
 
 
 router = APIRouter()

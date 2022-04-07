@@ -1,7 +1,7 @@
 from datetime import date
 from sqlalchemy import Column, Date, ForeignKey, Integer
 from sqlalchemy.orm import relationship
-from config.database import Base
+from app.config.database import Base
 
 
 class Availability(Base):

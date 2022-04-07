@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, listings, bookings
-from config.settings import origins
-from config.database import Base, engine, SessionLocal
+from app.routers import auth, listings, bookings
+from app.config.settings import origins
+from app.config.database import Base, engine, SessionLocal
 
 Base.metadata.create_all(bind=engine)
 

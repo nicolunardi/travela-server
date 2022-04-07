@@ -4,12 +4,12 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from jose import JWTError, jwt
 from fastapi.security import OAuth2PasswordBearer
-from dependencies.authentication import get_user_by_email
-from config.database import get_db
-from schemas.users import User
+from app.dependencies.authentication import get_user_by_email
+from app.config.database import get_db
+from app.schemas.users import User
 
-from schemas.tokens import TokenPayload
-from errors.exceptions import CREDENTIALS_EXCEPTION
+from app.schemas.tokens import TokenPayload
+from app.errors.exceptions import CREDENTIALS_EXCEPTION
 
 
 load_dotenv(find_dotenv())

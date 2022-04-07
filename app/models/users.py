@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, LargeBinary
 from sqlalchemy.orm import relationship
-from config.database import Base
+from app.config.database import Base
 
 
 class User(Base):

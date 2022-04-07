@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from errors.exceptions import BOOKING_NOT_FOUND_EXCEPTION
-from models.bookings import Booking
+from app.errors.exceptions import BOOKING_NOT_FOUND_EXCEPTION
+from app.models.bookings import Booking
 
 
 def get_booking_by_id(booking_id: int, db: Session):

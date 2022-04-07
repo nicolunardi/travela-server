@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, Text
-from config.database import Base
+from app.config.database import Base
 
 
 class Image(Base):

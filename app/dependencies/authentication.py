@@ -1,7 +1,7 @@
 import bcrypt
 from sqlalchemy.orm import Session
 from email_validator import validate_email
-from models.users import User as UserModel
+from app.models.users import User as UserModel
 
 # creates a hash of the password
 def get_password_hash(password: str):

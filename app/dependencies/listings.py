@@ -1,12 +1,12 @@
 from sqlalchemy.orm import Session
-from schemas.availability import AvailabilityIn
-from models.bedroom import Bedroom
-from models.images import Image
-from models.listings import Listing
-from models.users import User
-from models.availability import Availability
-from models.bookings import Booking
-from errors.exceptions import LISTING_NOT_FOUND_EXCEPTION
+from app.schemas.availability import AvailabilityIn
+from app.models.bedroom import Bedroom
+from app.models.images import Image
+from app.models.listings import Listing
+from app.models.users import User
+from app.models.availability import Availability
+from app.models.bookings import Booking
+from app.errors.exceptions import LISTING_NOT_FOUND_EXCEPTION
 
 
 def create_beds(bedrooms: list[int], db: Session, listing_id: int):

@@ -1,24 +1,24 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from models.listings import Listing as ListingModel
-from models.reviews import Review as ReviewModel
-from models.images import Image as ImageModel
-from models.bedroom import Bedroom as BedroomModel
-from models.availability import Availability as AvailabilityModel
+from app.models.listings import Listing as ListingModel
+from app.models.reviews import Review as ReviewModel
+from app.models.images import Image as ImageModel
+from app.models.bedroom import Bedroom as BedroomModel
+from app.models.availability import Availability as AvailabilityModel
 
-from schemas.listings import (
+from app.schemas.listings import (
     CreateListing,
     AllListingsOut,
     ListingOut,
     CreateListingOut,
 )
-from schemas.reviews import ReviewIn, ReviewOut
-from schemas.availability import AvailabilityIn
-from schemas.users import User
-from controllers import listingsControllers
-from config.database import get_db
-from dependencies.JWTtokens import get_current_user
+from app.schemas.reviews import ReviewIn, ReviewOut
+from app.schemas.availability import AvailabilityIn
+from app.schemas.users import User
+from app.controllers import listingsControllers
+from app.config.database import get_db
+from app.dependencies.JWTtokens import get_current_user
 
 router = APIRouter()
 

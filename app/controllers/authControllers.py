@@ -1,17 +1,17 @@
 from fastapi import HTTPException, status, Depends
 from email_validator import EmailNotValidError
 from sqlalchemy.orm import Session
-from schemas.tokens import Token
-from models.users import User as UserModel
-from schemas.users import UserCreate, UserLogin
-from dependencies.authentication import (
+from app.schemas.tokens import Token
+from app.models.users import User as UserModel
+from app.schemas.users import UserCreate, UserLogin
+from app.dependencies.authentication import (
     get_password_hash,
     check_valid_email,
     get_user_by_email,
     verify_password,
 )
-from dependencies.JWTtokens import create_access_token
-from config.database import get_db
+from app.dependencies.JWTtokens import create_access_token
+from app.config.database import get_db
 
 
 def create_user(db: Session, user: UserCreate):
