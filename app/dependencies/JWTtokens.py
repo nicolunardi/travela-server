@@ -14,8 +14,12 @@ from app.errors.exceptions import CREDENTIALS_EXCEPTION
 
 load_dotenv(find_dotenv())
 
-JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY")
-JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM")
+JWT_SECRET_KEY: str = os.environ.get("JWT_SECRET_KEY") or os.getenv(
+    "JWT_SECRET_KEY"
+)
+JWT_ALGORITHM: str = os.environ.get("JWT_ALGORITHM") or os.getenv(
+    "JWT_ALGORITHM"
+)
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/user/auth/login")
 
