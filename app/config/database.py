@@ -5,7 +5,10 @@ from sqlalchemy.orm import sessionmaker
 from .settings import settings
 
 
-DATABASE_URL = os.environ.get("DATABASE_URL") or settings.DATABASE_URL
+DATABASE_URL = (
+    os.environ.get("DATABASE_URL").replace("postgres://", "postgresql://")
+    or settings.DATABASE_URL
+)
 print(DATABASE_URL)
 
 engine = create_engine(DATABASE_URL)
